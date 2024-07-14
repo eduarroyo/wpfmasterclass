@@ -10,7 +10,7 @@ namespace Calculator;
 public partial class MainWindow : Window
 {
     double? leftOperator = null;
-    EOperation? operation = null;
+    string? operation = null;
     bool newValue = true;
 
     public MainWindow()
@@ -32,6 +32,7 @@ public partial class MainWindow : Window
         SubstractButton.Click += OperationButton_Click;
         MultiplyButton.Click += OperationButton_Click;
         DivideButton.Click += OperationButton_Click;
+        PercentageButton.Click += OperationButton_Click;
         EqualButton.Click += EqualButton_Click;
     }
 
@@ -41,7 +42,7 @@ public partial class MainWindow : Window
         if (leftOperator != null && operation != null)
         {
             double rightOperator = CurrentNumericValue();
-            Operation op = OperationFactory.BuildOperation(leftOperator.Value, rightOperator, operation.Value);
+            Operation op = OperationFactory.BuildOperation(leftOperator.Value, rightOperator, operation);
             double result = op.Result();
             SetCurrentValue(result);
             newValue = true;
@@ -51,14 +52,7 @@ public partial class MainWindow : Window
     private void OperationButton_Click(object sender, RoutedEventArgs e)
     {
         leftOperator = CurrentNumericValue();
-        operation = ((Button)sender).Content switch
-        {
-            "+" => EOperation.Sum,
-            "-" => EOperation.Substract,
-            "*" => EOperation.Multiply,
-            "/" => EOperation.Divide,
-            _ => null
-        };
+        operation = ((Button)sender).Content.ToString();
         newValue = true;
     }
 

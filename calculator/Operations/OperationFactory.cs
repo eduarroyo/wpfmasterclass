@@ -2,14 +2,15 @@
 
 internal static class OperationFactory
 {
-    public static Operation BuildOperation(double leftOperator, double rightOperator, EOperation operation)
+    public static Operation BuildOperation(double leftOperator, double rightOperator, string operation)
     {
         return operation switch
         {
-            EOperation.Sum => new SumOperation(leftOperator, rightOperator),
-            EOperation.Substract => new SubstractOperation(leftOperator, rightOperator),
-            EOperation.Multiply => new MultiplyOperation(leftOperator, rightOperator),
-            EOperation.Divide => new DivideOperation(leftOperator, rightOperator),
+            "+" => new SumOperation(leftOperator, rightOperator),
+            "-" => new SubstractOperation(leftOperator, rightOperator),
+            "*" => new MultiplyOperation(leftOperator, rightOperator),
+            "/" => new DivideOperation(leftOperator, rightOperator),
+            "%" => new PercentageOperation(leftOperator, rightOperator),
             _ => throw new ArgumentException("Invalid operation", operation.ToString())
         };
     }

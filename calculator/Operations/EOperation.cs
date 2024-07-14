@@ -5,5 +5,6 @@ public enum EOperation
     [StringValue("+")] Sum,
     [StringValue("-")] Substract,
     [StringValue("*")] Multiply,
-    [StringValue("/")] Divide
+    [StringValue("/")] Divide,
+    [StringValue("%")] Percentage
 }
