@@ -12,6 +12,13 @@ public partial class MainWindow : Window
     double? leftOperator = null;
     string? operation = null;
     bool newValue = true;
+    enum ECalcStatus
+    {
+        Clean,
+        InputLeft,
+        InputRight
+    }
+    private ECalcStatus status = ECalcStatus.Clean;
 
     public MainWindow()
     {
@@ -34,23 +41,52 @@ public partial class MainWindow : Window
         DivideButton.Click += OperationButton_Click;
         PercentageButton.Click += OperationButton_Click;
         EqualButton.Click += EqualButton_Click;
+        DecimalButton.Click += DecimalButton_Click;
     }
 
     #region Buttons Event Handlers
+    
+    private void DecimalButton_Click(object sender, RoutedEventArgs e)
+    {
+        if(status == ECalcStatus.Clean)
+        {
+            resultLabel.Content = $"{resultLabel.Content}.";
+            status = ECalcStatus.InputLeft;
+        }
+        else
+        {
+            string currentValue = CurrentStringValue();
+            if (!currentValue.Contains('.'))
+            {
+                resultLabel.Content = $"{resultLabel.Content}.";
+            }
+        }
+    }
+
     private void EqualButton_Click(object sender, RoutedEventArgs e)
     {
         if (leftOperator != null && operation != null)
         {
-            double rightOperator = CurrentNumericValue();
-            Operation op = OperationFactory.BuildOperation(leftOperator.Value, rightOperator, operation);
-            double result = op.Result();
-            SetCurrentValue(result);
-            newValue = true;
+            Calculate();
         }
+    }
+
+    private void Calculate()
+    {
+        double rightOperator = CurrentNumericValue();
+        Operation op = OperationFactory.BuildOperation(leftOperator.Value, rightOperator, operation);
+        double result = op.Result();
+        leftOperator = result;
+        SetCurrentValue(result);
+        newValue = true;
     }
 
     private void OperationButton_Click(object sender, RoutedEventArgs e)
     {
+        if(leftOperator.HasValue)
+        {
+            Calculate();
+        }
         leftOperator = CurrentNumericValue();
         operation = ((Button)sender).Content.ToString();
         newValue = true;
@@ -88,6 +124,7 @@ public partial class MainWindow : Window
         leftOperator = null;
         operation = null;
         newValue = true;
+        status = ECalcStatus.Clean;
     }
 
     #endregion
