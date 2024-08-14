@@ -8,8 +8,8 @@ internal class AccuWeatherHelper
 {
     private const string APIKEY = "UWPpWqF3EwAXBRlYYJcFrgkBS1GFNSy6";
     private const string BASE_URL = "http://dataservice.accuweather.com/";
-    private const string AUTOCOMPLETE_ENDPOINT = "locations/v1/cities/autocomplete?apikey{0}&q={1}";
-    private const string CURRENT_CONDITIONS_ENDPOINT = "currentconditions/v1/{0}?apikey{1}";
+    private const string AUTOCOMPLETE_ENDPOINT = "locations/v1/cities/autocomplete?apikey={0}&q={1}";
+    private const string CURRENT_CONDITIONS_ENDPOINT = "currentconditions/v1/{0}?apikey={1}";
 
     public async Task<IEnumerable<City>> GetCities(string query)
     {
