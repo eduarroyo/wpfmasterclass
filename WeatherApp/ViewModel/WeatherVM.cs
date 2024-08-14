@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using WeatherApp.Models;
+using WeatherApp.ViewModel.Commands;
+using WeatherApp.ViewModel.Helpers;
 
 namespace WeatherApp.ViewModel;
 
@@ -11,6 +13,10 @@ public class WeatherVM: INotifyPropertyChanged
     }
 
     #region Properties
+
+    private AccuWeatherHelper accuWeatherHelper;
+
+    public SearchCommand SearchCommand { get; set; }
 
     private string query;
     public string Query
@@ -51,23 +57,40 @@ public class WeatherVM: INotifyPropertyChanged
     {
         if (DesignMode)
         {
-            SelectedCity = new City
-            {
-                LocalizedName = "New York City"
-            };
-            CurrentConditions = new CurrentConditions
-            {
-                WeatherText = "Partially cloudy",
-                Temperature = new Temperature
-                {
-                    Metric = new Units
-                    {
-                        Value = 21
-                    }
-                }
-            };
+            DesignModeInitialization();
         }
+
+        accuWeatherHelper = new AccuWeatherHelper();
+        SearchCommand = new SearchCommand(this);
     }
+
+    private void DesignModeInitialization()
+    {
+        SelectedCity = new City
+        {
+            LocalizedName = "New York City"
+        };
+        CurrentConditions = new CurrentConditions
+        {
+            WeatherText = "Partially cloudy",
+            Temperature = new Temperature
+            {
+                Metric = new Units
+                {
+                    Value = 21
+                }
+            }
+        };
+    }
+
+    #region Commands
+
+    public async Task MakeQuery()
+    {
+        IEnumerable<City> cities = await accuWeatherHelper.GetCities(Query);
+    }
+
+    #endregion
 
     #region Implementation of INotifyPropertyChanged
 
