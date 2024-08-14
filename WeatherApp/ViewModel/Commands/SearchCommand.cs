@@ -11,11 +11,16 @@ public class SearchCommand : ICommand
         VM = vm;
     }
 
-    public event EventHandler? CanExecuteChanged;
+    public event EventHandler? CanExecuteChanged
+    {
+        add => CommandManager.RequerySuggested += value;
+        remove => CommandManager.RequerySuggested -= value;
+    }
 
     public bool CanExecute(object? parameter)
     {
-        return true;
+        string? query = (string?) parameter;
+        return !string.IsNullOrWhiteSpace(query); ;
     }
 
     public async void Execute(object? parameter)

@@ -7,12 +7,12 @@ namespace WeatherApp.ViewModel;
 
 public class WeatherVM: INotifyPropertyChanged
 {
+    #region Properties
+
     public bool DesignMode 
     {
         get => DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject());
     }
-
-    #region Properties
 
     private AccuWeatherHelper accuWeatherHelper;
 
@@ -82,7 +82,7 @@ public class WeatherVM: INotifyPropertyChanged
             }
         };
     }
-
+    
     #region Commands
 
     public async Task MakeQuery()
