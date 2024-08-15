@@ -11,20 +11,15 @@ public class SearchCommand : ICommand
         VM = vm;
     }
 
-    public event EventHandler? CanExecuteChanged
-    {
-        add => CommandManager.RequerySuggested += value;
-        remove => CommandManager.RequerySuggested -= value;
-    }
+    public event EventHandler? CanExecuteChanged;
 
     public bool CanExecute(object? parameter)
     {
-        string? query = (string?) parameter;
-        return !string.IsNullOrWhiteSpace(query); ;
+        return true;
     }
 
     public async void Execute(object? parameter)
     {
-        await VM.MakeQuery();
+        await VM.SearchCities();
     }
 }

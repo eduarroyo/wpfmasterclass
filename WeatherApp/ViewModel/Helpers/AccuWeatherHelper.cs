@@ -24,10 +24,10 @@ internal class AccuWeatherHelper
         return cities ?? [];
     }
 
-    public async Task<CurrentConditions?> GetCurrentConditions(int location)
+    public async Task<CurrentConditions?> GetCurrentConditions(string locationKey)
     {
         CurrentConditions? currentConditions;
-        string url = BASE_URL + string.Format(CURRENT_CONDITIONS_ENDPOINT, location, APIKEY);
+        string url = BASE_URL + string.Format(CURRENT_CONDITIONS_ENDPOINT, locationKey, APIKEY);
         using (HttpClient http = new())
         {
             HttpResponseMessage response = await http.GetAsync(url);

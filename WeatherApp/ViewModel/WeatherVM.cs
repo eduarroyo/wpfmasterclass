@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using WeatherApp.Models;
 using WeatherApp.ViewModel.Commands;
 using WeatherApp.ViewModel.Helpers;
@@ -40,16 +41,23 @@ public class WeatherVM: INotifyPropertyChanged
         }
     }
 
-    private City selectedCity;
-    public City SelectedCity
+    private City? selectedCity;
+    public City? SelectedCity
     {
         get => selectedCity;
         set
         {
             selectedCity = value;
             OnPropertyChanged(nameof(SelectedCity));
+            if (SelectedCity != null)
+            {
+                GetCurrentConditions();
+            }
         }
     }
+
+    public ObservableCollection<City> Cities { get; private set; }
+
 
     #endregion Properties
 
@@ -62,6 +70,7 @@ public class WeatherVM: INotifyPropertyChanged
 
         accuWeatherHelper = new AccuWeatherHelper();
         SearchCommand = new SearchCommand(this);
+        Cities = new ObservableCollection<City>();
     }
 
     private void DesignModeInitialization()
@@ -77,7 +86,7 @@ public class WeatherVM: INotifyPropertyChanged
             {
                 Metric = new Units
                 {
-                    Value = 21
+                    Value = "21"
                 }
             }
         };
@@ -85,9 +94,19 @@ public class WeatherVM: INotifyPropertyChanged
     
     #region Commands
 
-    public async Task MakeQuery()
+    public async Task SearchCities()
     {
         IEnumerable<City> cities = await accuWeatherHelper.GetCities(Query);
+        Cities.Clear();
+        foreach (City city in cities)
+        {
+            Cities.Add(city);
+        }
+    }
+
+    public async void GetCurrentConditions()
+    {
+        CurrentConditions = await accuWeatherHelper.GetCurrentConditions(SelectedCity.Key);
     }
 
     #endregion
