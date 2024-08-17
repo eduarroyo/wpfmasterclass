@@ -1,5 +1,6 @@
 ﻿using EvernoteClone.Model;
 using EvernoteClone.ViewModel.Commands;
+using EvernoteClone.ViewModel.Helpers;
 using System.Collections.ObjectModel;
 
 namespace EvernoteClone.ViewModel;
@@ -32,8 +33,8 @@ public class NotesVM
         }
     }
 
-    private NewNotebookCommand NewNotebookCommand;
-    private NewNoteCommand NewNoteCommand;
+    public NewNotebookCommand NewNotebookCommand { get; private set; }
+    public NewNoteCommand NewNoteCommand { get; private set; }
 
     #endregion
 
@@ -43,5 +44,27 @@ public class NotesVM
         Notes = new ObservableCollection<Note>();
         NewNotebookCommand = new NewNotebookCommand(this);
         NewNoteCommand = new NewNoteCommand(this);
+    }
+
+    public void CreateNotebook()
+    {
+        Notebook newNotebook = new()
+        {
+            Name = "New notebook",
+        };
+        DatabaseHelper.Insert(newNotebook);
+    }
+
+    public void CreateNote(int notebookId)
+    {
+        Note newNote = new()
+        {
+            NotebookId = notebookId,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            Title = "New note"
+        };
+
+        DatabaseHelper.Insert(newNote);
     }
 }

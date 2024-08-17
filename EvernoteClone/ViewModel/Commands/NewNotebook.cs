@@ -18,7 +18,7 @@ public class NewNotebookCommand : ICommand
 
     public void Execute(object? parameter)
     {
-        // TODO
+        VM.CreateNotebook();
     }
     #endregion
 
