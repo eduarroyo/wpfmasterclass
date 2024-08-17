@@ -24,6 +24,7 @@ public class DatabaseHelper
     {
         using (SQLiteConnection conn = new SQLiteConnection(dbFile))
         {
+            conn.CreateTable<T>();
             if (conn.Update(item) > 0)
             {
                 return true;
@@ -36,6 +37,7 @@ public class DatabaseHelper
     {
         using (SQLiteConnection conn = new SQLiteConnection(dbFile))
         {
+            conn.CreateTable<T>();
             if (conn.Delete(item) > 0)
             {
                 return true;
@@ -48,6 +50,7 @@ public class DatabaseHelper
     {
         using (SQLiteConnection conn = new SQLiteConnection(dbFile))
         {
+            conn.CreateTable<T>();
             return conn.Table<T>().ToList();
         }
     }

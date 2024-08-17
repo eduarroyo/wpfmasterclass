@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:EvernoteClone.View"
         xmlns:vm="clr-namespace:EvernoteClone.ViewModel"
         mc:Ignorable="d"
-        Title="NotesWindow" Height="300" Width="300">
+        Title="NotesWindow" Height="300" Width="500">
     
     <Window.Resources>
         <vm:NotesVM x:Key="vm"/>
@@ -26,9 +26,36 @@
                           Click="ExitMenuItem_Click"/>
             </MenuItem>
         </Menu>
-        <Grid>
+        <ListView DockPanel.Dock="Left"
+                  Width="140"
+                  ItemsSource="{Binding Notebooks}"
+                  SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ListView DockPanel.Dock="Left"
+                  Width="140"
+                  ItemsSource="{Binding Notes}"
+                  SelectedValue="{Binding SelectedNote, Mode=TwoWay}">
 
-        </Grid>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Title}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <Button Content="Speech"
+                        Name="SpeechButton"
+                        Click="SpeechButton_Click">
+                    
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
     </DockPanel>
     
 </Window>

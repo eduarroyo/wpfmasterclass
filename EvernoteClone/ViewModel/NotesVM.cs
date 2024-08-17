@@ -2,14 +2,15 @@
 using EvernoteClone.ViewModel.Commands;
 using EvernoteClone.ViewModel.Helpers;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace EvernoteClone.ViewModel;
 
-public class NotesVM
+public class NotesVM: INotifyPropertyChanged
 {
 
     #region Properties
-    ObservableCollection<Notebook> Notebooks { get; set; }
+    public ObservableCollection<Notebook> Notebooks { get; set; }
     private Notebook selectedNotebook;
     public Notebook SelectedNotebook
     {
@@ -17,19 +18,21 @@ public class NotesVM
         set
         {
             selectedNotebook = value;
-            // TODO: get notes
+            OnPropertyChanged(nameof(SelectedNotebook));
+            GetNotes();
         }
     }
 
-    ObservableCollection<Note> Notes { get; set; }
+    public ObservableCollection<Note> Notes { get; set; }
     private Note selectedNote;
+
     public Note SelectedNote
     {
         get => selectedNote;
         set
         {
             selectedNote = value;
-            
+            OnPropertyChanged(nameof(SelectedNote));
         }
     }
 
@@ -44,8 +47,11 @@ public class NotesVM
         Notes = new ObservableCollection<Note>();
         NewNotebookCommand = new NewNotebookCommand(this);
         NewNoteCommand = new NewNoteCommand(this);
+
+        GetNotebooks();
     }
 
+    #region Methods
     public void CreateNotebook()
     {
         Notebook newNotebook = new()
@@ -53,6 +59,7 @@ public class NotesVM
             Name = "New notebook",
         };
         DatabaseHelper.Insert(newNotebook);
+        GetNotebooks();
     }
 
     public void CreateNote(int notebookId)
@@ -62,9 +69,49 @@ public class NotesVM
             NotebookId = notebookId,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            Title = "New note"
+            Title = $"Note for {DateTime.Now}"
         };
 
         DatabaseHelper.Insert(newNote);
+        GetNotes();
     }
+
+    private void GetNotebooks()
+    {
+        List<Notebook> notebooks = DatabaseHelper.Query<Notebook>();
+        Notebooks.Clear();
+        foreach (Notebook notebook in notebooks)
+        {
+            Notebooks.Add(notebook);
+        }
+    }
+
+    private void GetNotes()
+    {
+        Notes.Clear();
+        if(SelectedNotebook == null)
+        {
+            return;
+        }
+
+        List<Note> notes = DatabaseHelper.Query<Note>()
+            .Where(n => n.NotebookId == SelectedNotebook.Id)
+            .ToList();
+        foreach (Note note in notes)
+        {
+            Notes.Add(note);
+        }
+    }
+    #endregion
+
+    #region INotifyPropertyChanged Implementation
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void OnPropertyChanged(string propertyName)
+    { 
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    #endregion
 }

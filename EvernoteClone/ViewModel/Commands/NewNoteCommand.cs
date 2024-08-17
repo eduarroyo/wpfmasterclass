@@ -10,7 +10,11 @@ public class NewNoteCommand: ICommand
     #endregion
 
     #region ICommand implementation
-    public event EventHandler? CanExecuteChanged;
+    public event EventHandler? CanExecuteChanged
+    {
+        add => CommandManager.RequerySuggested += value;
+        remove => CommandManager.RequerySuggested -= value;
+    }
 
     public bool CanExecute(object? parameter)
     {
