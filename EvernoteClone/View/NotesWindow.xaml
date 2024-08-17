@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:EvernoteClone.View"
         xmlns:vm="clr-namespace:EvernoteClone.ViewModel"
         mc:Ignorable="d"
-        Title="NotesWindow" Height="300" Width="500">
+        Title="NotesWindow" Height="300" Width="550">
     
     <Window.Resources>
         <vm:NotesVM x:Key="vm"/>
@@ -56,11 +56,6 @@
         </ListView>
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
-                <Button Content="Speech"
-                        Name="SpeechButton"
-                        Click="SpeechButton_Click">
-
-                </Button>
                 <ToggleButton x:Name="boldButton" Click="boldButton_Click">
                     <TextBlock Text="B"
                                FontWeight="Bold"/>
@@ -72,6 +67,19 @@
                 <ToggleButton x:Name="underlineButton" Click="underlineButton_Click">
                     <TextBlock Text="U" TextDecorations="Underline" />
                 </ToggleButton>
+
+                <ComboBox x:Name="fontFamilyCombo"
+                          Width="100"
+                          SelectionChanged="fontFamilyCombo_SelectionChanged" />
+
+
+                <ComboBox x:Name="fontSizeCombo"
+                          Width="50"
+                          IsEditable="true"
+                          TextBoxBase.TextChanged="fontSizeCombo_TextChanged"/>
+
+
+
             </ToolBar>
         </ToolBarTray>
         <Grid>
