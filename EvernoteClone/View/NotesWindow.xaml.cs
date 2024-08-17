@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 
 namespace EvernoteClone.View;
@@ -32,6 +33,20 @@ public partial class NotesWindow : Window
 
     private void boldButton_Click(object sender, RoutedEventArgs e)
     {
-        contentRichTextBox.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+        bool isButtonChecked = (sender as ToggleButton)?.IsChecked ?? false;
+        if (isButtonChecked)
+        {
+            contentRichTextBox.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+        }
+        else
+        {
+            contentRichTextBox.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Normal);
+        }
+    }
+
+    private void contentRichTextBox_SelectionChanged(object sender, RoutedEventArgs e)
+    {
+        var selectedWeigth = contentRichTextBox.Selection.GetPropertyValue(Inline.FontWeightProperty);
+        boldButton.IsChecked = selectedWeigth.Equals(FontWeights.Bold);
     }
 }
