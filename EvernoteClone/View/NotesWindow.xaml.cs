@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Documents;
 
 namespace EvernoteClone.View;
 
@@ -20,5 +21,17 @@ public partial class NotesWindow : Window
     private void SpeechButton_Click(object sender, RoutedEventArgs e)
     {
 
+    }
+
+    private void contentRichTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+    {
+        TextRange tr = new(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd);
+        int ammountOfCharacters = tr.Text.Length;
+        statusTextBlock.Text = $"Document length: {ammountOfCharacters} characters";
+    }
+
+    private void boldButton_Click(object sender, RoutedEventArgs e)
+    {
+        contentRichTextBox.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
     }
 }
