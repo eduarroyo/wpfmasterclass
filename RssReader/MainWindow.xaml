@@ -9,11 +9,8 @@
         Title="MainWindow"
         Height="800"
         Width="400">
-    <Window.Resources>
-        <vm:MainVM x:Key="vm"/>
-    </Window.Resources>
 
-    <Grid DataContext="{Binding Source={StaticResource vm}}">
+    <Grid>
         <ListView ItemsSource="{Binding Items}">
             <ListView.ItemTemplate>
                 <DataTemplate>

@@ -1,4 +1,5 @@
-﻿using RssReader.Model;
+﻿using Microsoft.Extensions.Configuration;
+using RssReader.Model;
 using System.IO;
 using System.Net.Http;
 using System.Text;
@@ -6,11 +7,17 @@ using System.Xml.Serialization;
 
 namespace RssReader.ViewModel;
 
-public class RssHelper
+public class RssHelper : IRssHelper
 {
-    private static readonly Uri uri = new("https://www.microsiervos.com/index.xml");
+    private readonly Uri uri;
     
-    public static async Task<List<Item>> GetPosts()
+    public RssHelper(IConfiguration config)
+    {
+        string? url = config.GetSection("RssHelper")["url"];
+        uri = new Uri(url!);
+    }
+
+    public async Task<List<Item>> GetPosts()
     {
         List<Item> posts = new List<Item>();
         XmlSerializer xmlSerializer = new(typeof(Rss));
